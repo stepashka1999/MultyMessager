@@ -1,0 +1,55 @@
+﻿<Page x:Class="MultyMessager.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MultyMessager.Views"
+      xmlns:vm ="clr-namespace:MultyMessager.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainPage"
+      Background="White">
+
+    <Page.Resources>
+        <ControlTemplate x:Key="HomeButton" TargetType="Button">
+            <Grid>
+                <Polygon
+                x:Name="ply"
+                Points="22,45 22,60 60,60 60,45 67,45 41,20 15,45" 
+                Stretch="Fill" 
+                Fill="Gray" 
+                Margin="5"/>
+            </Grid>
+        </ControlTemplate>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <vm:MainPageViewModel/>
+    </Page.DataContext>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Grid.RowSpan="2">
+            <Button Template="{StaticResource HomeButton}" Command="{Binding DefaultPageCommand}"/>
+            <ListBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Button Content="Telegram" Command="{Binding TgPageCommand}"/>
+            </ListBox>
+            <Button Background="{x:Null}" Command="{Binding SettingsPageCommand}">
+                <Image Source="D:\Visual Studio Projects\Multy Messager\MultyMessager\MultyMessager\img\Settings.png" Margin="5"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Button Content="Новое сообщение" Background="{x:Null}"/>
+        </StackPanel>
+        <!-- Pages space -->
+        <Frame Grid.Column="1" Grid.Row="1" Content="{Binding CurrentPage}"/>
+    </Grid>
+</Page>
