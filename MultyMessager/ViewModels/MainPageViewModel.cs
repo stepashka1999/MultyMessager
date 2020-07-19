@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using TLSharp.Core;
 using MultyMessager.Views;
+using System.Windows.Navigation;
 
 namespace MultyMessager.ViewModels
 {
@@ -15,23 +16,12 @@ namespace MultyMessager.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Pages
-        #region Pages
-
-        private Page DefaulltPage;
-        private Page SettingsPage;
-        private Page TgPage;
-
-        #endregion
-
-
-
-
+        
         // Clients
         #region Clients
 
         private TelegramClient tgClient;
-        
+
         //TODO
         //
         // vkClient
@@ -42,16 +32,13 @@ namespace MultyMessager.ViewModels
         #endregion
 
 
-
         private Page currentPage;
         public Page CurrentPage { get => currentPage; set { currentPage = value; OnPropertyChanged(nameof(CurrentPage)); } }
  
 
         public MainPageViewModel()
         {
-            DefaulltPage = new Views.DefaultPage();
-            SettingsPage = new Views.SettignsPage();
-            TgPage = new Views.TgPage(tgClient);
+
         }
 
         //-------- Methods
@@ -76,7 +63,7 @@ namespace MultyMessager.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    CurrentPage = DefaulltPage;
+                    CurrentPage = new DefaultPage();
                 });
             }
         }
@@ -87,10 +74,11 @@ namespace MultyMessager.ViewModels
             {
                 return new RelayCommand(obj =>
                 {
-                    CurrentPage = SettingsPage;
+                    CurrentPage = new SettignsPage();
                 });
             }
         }
+
         public ICommand TgPageCommand
         {
             get
@@ -100,7 +88,7 @@ namespace MultyMessager.ViewModels
                     if(tgClient == null)
                     {
                         SetTgClient();
-                        CurrentPage = new TgAuthPage(tgClient);
+                        CurrentPage = new TgAuthPage(tgClient, (obj as Frame));
                     }
                     else  CurrentPage = new TgPage(tgClient);
 

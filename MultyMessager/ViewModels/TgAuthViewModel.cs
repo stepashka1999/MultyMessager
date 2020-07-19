@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultyMessager.Views;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TLSharp;
 using TLSharp.Core;
@@ -18,6 +20,7 @@ namespace MultyMessager.ViewModels
 
 
         private TelegramClient client;
+        private Frame frame;
 
 
         private string error;
@@ -32,8 +35,11 @@ namespace MultyMessager.ViewModels
         public string Code { get => code; set { code = value; OnPropertyChanged(nameof(Code)); } }
         
 
-        public TgAuthViewModel(TelegramClient client)
+        private string hash;
+
+        public TgAuthViewModel(TelegramClient client, Frame frame)
         {
+            this.frame = frame;
             this.client = client;
         }
 
@@ -61,21 +67,39 @@ namespace MultyMessager.ViewModels
 
         private bool VerifyNumber()
         {
-            if ( string.IsNullOrEmpty(Phone) || Phone.Length != 18) return false;
-
+            if (string.IsNullOrEmpty(Phone) || Phone.Length != 18)
+            {
+                Error = "Проверьте правильность введенного номера телефона.";
+                return false;
+            }
             return true;
         }
 
-        private void SendCodeRequest()
+        private async void SendCodeRequest()
         {
             try
             {
-                client.SendCodeRequestAsync(Phone);
+                if(VerifyNumber())  hash = await client.SendCodeRequestAsync(Phone)t;
             }
             catch(Exception e)
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+        private bool MakeAuth()
+        {
+            try
+            {
+                var user = client.MakeAuthAsync(Phone, hash, Code).Result;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+
+            return true;
         }
 
 
@@ -92,13 +116,16 @@ namespace MultyMessager.ViewModels
             }
         }
 
-        public ICommand Aunteficate
+        public ICommand AunteficateCommand
         {
             get
             {
                 return new RelayCommand( obj =>
-                { 
-                    
+                {
+                    if(MakeAuth())
+                    {
+                        frame.Navigate(new TgPage(client));
+                    }
                 });
             }
         }

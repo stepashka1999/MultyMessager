@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TeleSharp.TL;
+using TeleSharp.TL.Messages;
 using TLSharp.Core;
 
 namespace MultyMessager.ViewModels
@@ -23,7 +24,7 @@ namespace MultyMessager.ViewModels
         public TLImportedContact SelectedContact { get => selectedContact; set { selectedContact = value; OnPropertyChanged(nameof(SelectedContact)); } }
 
 
-        public BindingList<TLImportedContact> Contacts { get; set; }
+        public BindingList<TLAbsChat> Dialogs { get; set; }
 
 
         /// <summary>
@@ -33,8 +34,21 @@ namespace MultyMessager.ViewModels
         public TgClientViewModel(TelegramClient client)
         {
             tgClient = client;
-            //tgClient.ImportContactsAsync((IReadOnlyList<TLInputPhoneContact>)Contacts);
+
+            FillDialogs();
+
             //tgClient.GetHistoryAsync(peer)
+        }
+
+        private void FillDialogs()
+        {
+            var dialogs = (TLDialogs)tgClient.GetUserDialogsAsync().Result;
+
+            Dialogs = new BindingList<TLAbsChat>();
+            foreach (var dialog in dialogs.Chats)
+            {
+                Dialogs.Add(dialog);
+            }
         }
 
         private void OnPropertyChanged(string name)

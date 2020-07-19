@@ -40,7 +40,7 @@
         <StackPanel Grid.Column="0" Grid.RowSpan="2">
             <Button Template="{StaticResource HomeButton}" Command="{Binding DefaultPageCommand}"/>
             <ListBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Button Content="Telegram" Command="{Binding TgPageCommand}"/>
+                <Button Content="Telegram" Command="{Binding TgPageCommand}" CommandParameter="{Binding ElementName=frame}"/>
             </ListBox>
             <Button Background="{x:Null}" Command="{Binding SettingsPageCommand}">
                 <Image Source="D:\Visual Studio Projects\Multy Messager\MultyMessager\MultyMessager\img\Settings.png" Margin="5"/>
@@ -50,6 +50,6 @@
             <Button Content="Новое сообщение" Background="{x:Null}"/>
         </StackPanel>
         <!-- Pages space -->
-        <Frame Grid.Column="1" Grid.Row="1" Content="{Binding CurrentPage}"/>
+        <Frame x:Name="frame" Grid.Column="1" Grid.Row="1" Content="{Binding CurrentPage}"/>
     </Grid>
 </Page>

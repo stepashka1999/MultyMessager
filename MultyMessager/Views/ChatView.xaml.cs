@@ -12,21 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TLSharp.Core;
-using MultyMessager.Views;
-using MultyMessager.ViewModels;
 
 namespace MultyMessager.Views
 {
     /// <summary>
-    /// Логика взаимодействия для TgAuthPage.xaml
+    /// Логика взаимодействия для ChatView.xaml
     /// </summary>
-    public partial class TgAuthPage : Page
+    public partial class ChatView : Page
     {
-        public TgAuthPage(TelegramClient client, Frame frame)
+        public ChatView()
         {
             InitializeComponent();
-            DataContext = new TgAuthViewModel(client, frame); 
         }
     }
 }

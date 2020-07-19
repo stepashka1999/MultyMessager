@@ -9,6 +9,6 @@
       Title="TgPage">
 
     <Grid Background="White">
-        <ListBox ItemsSource="{Binding Contacts}"/>
+        <ListBox ItemsSource="{Binding Dialogs}"/>
     </Grid>
 </Page>
